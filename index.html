@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        #audioplayer{
+	width: 480px;
+	height: 700px;
+	margin: 50px auto auto auto;
+    border: solid;
+}
+
+#pButton{
+    height:60px; 
+    width: 60px;
+    border: none;
+    background-size: 50% 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+    float:left;
+    outline:none;
+}
+
+.play{background: url('a.jpg') ;}
+.pause{background: url('b.jpg') ;}
+
+#timeline{
+	width: 400px;
+	height: 20px;
+	margin-top: 20px;
+	float: left;
+	border-radius: 15px;
+	background: rgb(9, 49, 9);
+  
+}
+#playhead{
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	margin-top: 1px;
+	background: white;
+
+}
+img{
+    width: 319px;
+height: 317px;
+border-radius: 175px;
+border-color: #ecf0f1;
+border-width: 8px;
+border-style: solid;
+}
+body{
+    background-color:white;
+}
+h1{
+
+}
+h1 {
+  font-size: 30px;
+  font-family: 'Lato', sans-serif;
+  color: black;
+}
+
+h2 {
+  font-size: 16px;
+  font-family: 'Lato', sans-serif;
+  color: black;
+}
+h3{
+    color: black;
+}
+
+a {
+  color: #fff;
+}
+
+.btn {
+  padding: 40px 30px 30px 30px;
+  margin: 0 1px 0 0;
+  text-decoration: none;
+  text-align: center;
+  color: #7f8c8d;
+  cursor: pointer;
+  background: #2c3e50;
+  border-bottom: 10px solid #34495e;
+  transition-property: border-bottom .6s linear 0s;
+  -moz-transition: border-bottom .6s linear 0s;
+  -webkit-transition: border-bottom .6s linear 0s;
+  -o-transition: border-bottom .6s linear 0s;
+  font-size: 25px;
+}
+
+.btn.active {
+  border-bottom: 10px solid #2ecc71;
+  color: #2ecc71;
+}
+
+.button-group-navigation li {
+  display: inline-block;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  zoom: 1;
+  background: #7f8c8d;
+}
+
+.button-group-navigation li .btn {
+  float: left;
+  margin-left: -4px;
+}
+
+.button-group-navigation>.btn:first-child,
+.button-group-navigation li:first-child .btn {
+  margin-left: 0;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.button-group-navigation>.btn:last-child,
+.button-group-navigation li:last-child>.btn {
+  margin-right: 0;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+    </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mp3 Player</title>
+</head>
+<br>
+<br>
+<center><h1>Mp3 Player</h1></center>
+<body>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    
+    <audio id="music" preload="true">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        br
+        <source src="a.mp3">
+                  <source src="a.mp3">
+          </audio>
+          
+      <div id="audioplayer">
+          <br>
+          <br>
+          <br>
+        <center><img src="d.jpg"></center>
+        <br>
+        <br>
+        <br>
+        <center><h3>Sanatçı-Müzik</h3></center> 
+          <button id="pButton" class="play"></button>
+          
+        <div id="timeline">    
+                  <div id="playhead"></div>
+        </div>
+        <br>
+        <br>
+       
+       <br> 
+        <br>
+        <center>
+        <div class="button-group-navigation" target="_blank">
+            <li><a class="btn" href="#">İleri</a></li>
+            <li><a class="btn" href="#">Geri</a></li>
+            
+          </div>
+      </div>
+    </center>
+</body>
+<script>
+    var music = document.getElementById('music'); 
+var duration = music.duration; 
+var pButton = document.getElementById('pButton'); 
+var playhead = document.getElementById('playhead'); 
+var timeline = document.getElementById('timeline'); 
+
+
+var timelineWidth = timeline.offsetWidth - playhead.offsetWidth;
+
+
+pButton.addEventListener("click", play);
+
+
+music.addEventListener("timeupdate", timeUpdate, false);
+
+
+timeline.addEventListener("click", function(event) {
+    moveplayhead(event);
+    music.currentTime = duration * clickPercent(event);
+}, false);
+
+function clickPercent(event) {
+    return (event.clientX - getPosition(timeline)) / timelineWidth;
+}
+
+
+playhead.addEventListener('mousedown', mouseDown, false);
+window.addEventListener('mouseup', mouseUp, false);
+
+
+var onplayhead = false;
+
+
+function mouseDown() {
+    onplayhead = true;
+    window.addEventListener('mousemove', moveplayhead, true);
+    music.removeEventListener('timeupdate', timeUpdate, false);
+}
+
+
+function mouseUp(event) {
+    if (onplayhead == true) {
+        moveplayhead(event);
+        window.removeEventListener('mousemove', moveplayhead, true);
+       
+        music.currentTime = duration * clickPercent(event);
+        music.addEventListener('timeupdate', timeUpdate, false);
+    }
+    onplayhead = false;
+}
+
+function moveplayhead(event) {
+    var newMargLeft = event.clientX - getPosition(timeline);
+
+    if (newMargLeft >= 0 && newMargLeft <= timelineWidth) {
+        playhead.style.marginLeft = newMargLeft + "px";
+    }
+    if (newMargLeft < 0) {
+        playhead.style.marginLeft = "0px";
+    }
+    if (newMargLeft > timelineWidth) {
+        playhead.style.marginLeft = timelineWidth + "px";
+    }
+}
+
+
+function timeUpdate() {
+    var playPercent = timelineWidth * (music.currentTime / duration);
+    playhead.style.marginLeft = playPercent + "px";
+    if (music.currentTime == duration) {
+        pButton.className = "";
+        pButton.className = "play";
+    }
+}
+
+
+function play() {
+    
+    if (music.paused) {
+        music.play();
+        
+        pButton.className = "";
+        pButton.className = "pause";
+    } else { 
+        music.pause();
+        
+        pButton.className = "";
+        pButton.className = "play";
+    }
+}
+
+
+music.addEventListener("canplaythrough", function() {
+    duration = music.duration;
+}, false);
+
+
+function getPosition(el) {
+    return el.getBoundingClientRect().left;
+}
+
+</script>
+</html>
